@@ -1,0 +1,19 @@
+{
+  "formRules": {
+    "invalidEmail": "Invalid e-mail",
+    "required": ""
+  },
+  "view": {
+    "login": {
+      "login": "Login",
+      "loginBtn": "Login",
+      "loginForm": "Login Form",
+      "password": "Password"
+    }
+  },
+  "navigation": {
+    "invitations": "Invitations",
+    "logout": "Logout",
+    "preRegistrations": "Pre Registrations"
+  }
+}

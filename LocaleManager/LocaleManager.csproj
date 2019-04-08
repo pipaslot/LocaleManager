@@ -128,7 +128,7 @@
     <None Include="de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="default.json">
+    <None Include="en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LocaleManager_TemporaryKey.pfx" />
