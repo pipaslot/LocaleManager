@@ -79,7 +79,7 @@ namespace LocaleManager
             var invalid = _fileProvider.Translations.GetInvalidNodes();
 
             var columnsCount = _fileProvider.Locales.Count + 1;
-            foreach (var path in _fileProvider.Translations.Keys)
+            foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))
             {
                 var columns = new List<string>(columnsCount) { path };
 
@@ -119,7 +119,7 @@ namespace LocaleManager
                 skip++;
             }
         }
-
+        
         #region Buttons
 
         private void MenuItem_LoadClick(object sender, RoutedEventArgs e)
