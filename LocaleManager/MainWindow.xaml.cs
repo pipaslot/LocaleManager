@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -33,13 +34,13 @@ namespace LocaleManager
         public MainWindow()
         {
             InitializeComponent();
-            Init(AppDomain.CurrentDomain.BaseDirectory);
             dgTranslations.ItemsSource = _rows;
             dgTranslations.AutoGenerateColumns = false;
             dgTranslations.CanUserAddRows = false;
             dgTranslations.CanUserDeleteRows = false;
+            Init(AppDomain.CurrentDomain.BaseDirectory);
         }
-        
+
         private void Init(string directory)
         {
             _rows.Clear();
@@ -55,7 +56,7 @@ namespace LocaleManager
             {
                 Binding = new Binding("[0]"),
                 Header = "Key",
-                Width = 400,
+                Width = new DataGridLength(2, DataGridLengthUnitType.Star),
                 IsReadOnly = true
             });
             var i = 1;
@@ -65,7 +66,7 @@ namespace LocaleManager
                 {
                     Binding = new Binding($"[{i}]"),
                     Header = locale,
-                    Width = 300
+                    Width = new DataGridLength(1, DataGridLengthUnitType.Star)
                 });
                 i++;
             }
@@ -78,7 +79,7 @@ namespace LocaleManager
             var invalid = _fileProvider.Translations.GetInvalidNodes();
 
             var columnsCount = _fileProvider.Locales.Count + 1;
-            foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))
+            foreach (var path in _fileProvider.Translations.Keys)
             {
                 var columns = new List<string>(columnsCount) { path };
 
