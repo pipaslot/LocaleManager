@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocaleManager", "LocaleManager\LocaleManager.csproj", "{C81E9178-CFE1-4C7F-BA0A-D9E3D6FA06AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocaleManager.Core", "LocaleManager.Core\LocaleManager.Core.csproj", "{AD91E420-D831-4219-80E8-8663E74D83FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C81E9178-CFE1-4C7F-BA0A-D9E3D6FA06AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81E9178-CFE1-4C7F-BA0A-D9E3D6FA06AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81E9178-CFE1-4C7F-BA0A-D9E3D6FA06AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81E9178-CFE1-4C7F-BA0A-D9E3D6FA06AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD91E420-D831-4219-80E8-8663E74D83FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD91E420-D831-4219-80E8-8663E74D83FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD91E420-D831-4219-80E8-8663E74D83FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD91E420-D831-4219-80E8-8663E74D83FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1319A40-1CAA-4B88-9BFD-787E4A91F5DC}
+	EndGlobalSection
+EndGlobal

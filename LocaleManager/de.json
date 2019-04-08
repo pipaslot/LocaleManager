@@ -1,0 +1,12 @@
+{
+  "_oldValue": "dsdsds",
+  "moduleAdmin": {
+    "view": {
+      "login": {
+        "login": "Anmeldung",
+        "password": "Passwort"
+      }
+    },
+    "navigation": "This will make a conflict !!!!"
+  }
+}

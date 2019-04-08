@@ -1,0 +1,25 @@
+{
+  "formRules": {
+    "invalidEmail": "Invalid e-mail",
+    "required": ""
+  },
+  "moduleAdmin":{
+    "view":{
+      "login": {
+        "login": "Login",
+        "loginBtn": "Login",
+        "loginForm": "Login Form",
+        "password": "Password"
+      }
+    },
+    "navigation":{
+      "invitations": "Invitations",
+      "logout": "Logout",
+      "preRegistrations": "Pre Registrations"
+    }
+  },
+  "$confirm":{
+    "ok": "Ok",
+    "cancel": "Cancel"
+  }
+}
