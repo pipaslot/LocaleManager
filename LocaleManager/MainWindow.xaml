@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LocaleManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1000">
+        Title="Local Manager" Height="450" Width="1000">
     <Grid>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Load" Click="MenuItem_LoadClick"/>
