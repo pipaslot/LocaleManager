@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LocaleManager.Core
 {
@@ -16,9 +17,15 @@ namespace LocaleManager.Core
         public string Serialize(Dictionary<string, string> content)
         {
             var token = new JObject();
-            foreach (var pair in content)
+            var keys = content.Keys.ToList();
+            keys.Sort();
+            foreach (var key in keys)
             {
-                token.SetValue(pair.Key, pair.Value);
+                var value = content[key];
+                if (!string.IsNullOrEmpty(value))
+                {
+                    token.SetValue(key, value);
+                }
             }
             return JsonConvert.SerializeObject(token, Formatting.Indented);
         }
