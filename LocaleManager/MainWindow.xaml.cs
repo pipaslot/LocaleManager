@@ -65,7 +65,7 @@ namespace LocaleManager
                 CanUserReorder = false
             });
             var i = 1;
-            foreach (var locale in _fileProvider.Locales)
+            foreach (var locale in _fileProvider.Translations.GetLocalesByCountOfValues())
             {
                 dgTranslations.Columns.Add(new DataGridTextColumn
                 {
@@ -95,7 +95,7 @@ namespace LocaleManager
             var invalid = _fileProvider.Translations.GetInvalidNodes();
 
             var columnsCount = _fileProvider.Locales.Count + 1;
-            foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))
+            foreach (var path in _fileProvider.Translations.Keys.OrderBy(k=>k))
             {
                 var columns = new List<string>(columnsCount) { path };
 

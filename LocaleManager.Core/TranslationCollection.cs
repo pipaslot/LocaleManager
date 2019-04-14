@@ -7,7 +7,7 @@ namespace LocaleManager.Core
 {
     public class TranslationCollection
     {
-        private Dictionary<string, Dictionary<string, string>> _collection { get; set; } = new Dictionary<string, Dictionary<string, string>>();
+        private readonly Dictionary<string, Dictionary<string, string>> _collection = new Dictionary<string, Dictionary<string, string>>();
 
         public ReadOnlyCollection<string> Locales { get; }
         public ReadOnlyCollection<string> Keys => new ReadOnlyCollection<string>(_collection.Select(c => c.Key).ToList());
@@ -78,6 +78,20 @@ namespace LocaleManager.Core
                 result.Add(locale, defaultValue);
             }
             return result;
+        }
+
+        public List<string> GetLocalesByCountOfValues()
+        {
+            var stats = new Dictionary<string, int>();
+            foreach (var locale in Locales)
+            {
+                var count = _collection.Count(c => c.Value.Any(l => l.Key == locale && !string.IsNullOrWhiteSpace(l.Value)));
+                stats.Add(locale, count);
+            }
+            return stats
+                .OrderByDescending(c=>c.Value)
+                .Select(c => c.Key)
+                .ToList();
         }
 
         public List<string> GetInvalidNodes()
