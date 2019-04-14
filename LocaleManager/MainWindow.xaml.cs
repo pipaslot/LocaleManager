@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LocaleManager.Properties;
 using LocaleManager.Translations;
 using WinForm = System.Windows.Forms;
 
@@ -40,7 +41,8 @@ namespace LocaleManager
             dgTranslations.AutoGenerateColumns = false;
             dgTranslations.CanUserAddRows = false;
             dgTranslations.CanUserDeleteRows = false;
-            Init(AppDomain.CurrentDomain.BaseDirectory);
+            var directory = GetDirectory();
+            Init(directory);
         }
 
         private void Init(string directory)
@@ -52,7 +54,7 @@ namespace LocaleManager
                 MessageBox.Show("No Locale file was found");
                 return;
             }
-
+            
             dgTranslations.Columns.Clear();
             dgTranslations.Columns.Add(new DataGridTextColumn
             {
@@ -76,6 +78,17 @@ namespace LocaleManager
             RefreshGridData();
         }
 
+        private string GetDirectory()
+        {
+            var directory = Settings.Default.Folder;
+            return (!string.IsNullOrWhiteSpace(directory)  && Directory.Exists(directory))? directory : AppDomain.CurrentDomain.BaseDirectory;
+        }
+
+        private void SetDirectory(string directory)
+        {
+            Settings.Default.Folder = directory;
+            Settings.Default.Save();
+        }
         private void RefreshGridData()
         {
             _rows.Clear();
@@ -136,6 +149,7 @@ namespace LocaleManager
 
             if (result == WinForm.DialogResult.OK)
             {
+                SetDirectory(folderDialog.SelectedPath);
                 Init(folderDialog.SelectedPath);
             }
         }
