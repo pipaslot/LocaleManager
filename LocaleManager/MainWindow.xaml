@@ -13,6 +13,9 @@
             <Separator />
             <MenuItem Header="_Add" Click="MenuItem_AddClick"/>
             <MenuItem Header="_Remove" Click="MenuItem_RemoveClick" IsEnabled="{Binding ElementName=dgTranslations, Path=SelectedItems.Count}"/>
+            <Separator />
+            <MenuItem Header="_Translate" Click="MenuItem_TranslateClick"/>
+            <ProgressBar Minimum="0" Maximum="100" Name="pbStatus" Visibility="Hidden" MinWidth="50" MinHeight="10"/>
         </Menu>
         <DataGrid Name="dgTranslations" Margin="0,20,0,0"/>
     </Grid>

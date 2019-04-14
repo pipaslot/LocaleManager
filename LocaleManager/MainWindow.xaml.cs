@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LocaleManager.Translations;
 using WinForm = System.Windows.Forms;
 
 namespace LocaleManager
@@ -29,6 +30,7 @@ namespace LocaleManager
     public partial class MainWindow : Window
     {
         private readonly TranslationManager _fileProvider = new TranslationManager();
+        private readonly Translator _translator = new Translator();
         private readonly ObservableCollection<DataGridRow> _rows = new ObservableCollection<DataGridRow>();
 
         public MainWindow()
@@ -57,7 +59,8 @@ namespace LocaleManager
                 Binding = new Binding("[0]"),
                 Header = "Key",
                 Width = new DataGridLength(2, DataGridLengthUnitType.Star),
-                IsReadOnly = true
+                IsReadOnly = true,
+                CanUserReorder = false
             });
             var i = 1;
             foreach (var locale in _fileProvider.Locales)
@@ -119,7 +122,7 @@ namespace LocaleManager
                 skip++;
             }
         }
-        
+
         #region Buttons
 
         private void MenuItem_LoadClick(object sender, RoutedEventArgs e)
@@ -171,6 +174,38 @@ namespace LocaleManager
                     _fileProvider.Translations.Remove(path);
                 }
             }
+            RefreshGridData();
+        }
+
+        private async void MenuItem_TranslateClick(object sender, RoutedEventArgs e)
+        {
+            var columns = dgTranslations.Columns;
+            var sourceLocale = columns.Where(c => c.DisplayIndex == 1).Select(c => c.Header.ToString()).First();
+            var targetLocales = columns.Where(c => c.DisplayIndex > 1).Select(c => c.Header.ToString()).ToList();
+            pbStatus.Value = 0;
+            pbStatus.Visibility = Visibility.Visible;
+            var statusStep = 100 / (_fileProvider.Translations.Keys.Count * targetLocales.Count);
+            foreach (var key in _fileProvider.Translations.Keys)
+            {
+                foreach (var targetLocale in targetLocales)
+                {
+                    pbStatus.Value += statusStep;
+                    var currentValue = _fileProvider.Translations.Get(key, targetLocale);
+                    if (!string.IsNullOrWhiteSpace(currentValue))
+                    {
+                       continue;
+                    }
+                    var sourceValue = _fileProvider.Translations.Get(key, sourceLocale);
+                    if (string.IsNullOrWhiteSpace(sourceValue))
+                    {
+                        continue;
+                    }
+                    var translated = await _translator.Translate(sourceValue, targetLocale, sourceLocale);
+                    _fileProvider.Translations.Set(key, targetLocale, translated);
+                }
+            }
+
+            pbStatus.Visibility = Visibility.Hidden;
             RefreshGridData();
         }
 

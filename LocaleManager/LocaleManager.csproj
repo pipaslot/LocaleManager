@@ -145,6 +145,10 @@
       <Project>{AD91E420-D831-4219-80E8-8663E74D83FE}</Project>
       <Name>LocaleManager.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LocaleManager.Translations\LocaleManager.Translations.csproj">
+      <Project>{C959C70B-A271-487F-B870-6E27E2155EC8}</Project>
+      <Name>LocaleManager.Translations</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
