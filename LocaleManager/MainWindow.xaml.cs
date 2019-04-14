@@ -179,9 +179,16 @@ namespace LocaleManager
 
         private async void MenuItem_TranslateClick(object sender, RoutedEventArgs e)
         {
-            var columns = dgTranslations.Columns;
-            var sourceLocale = columns.Where(c => c.DisplayIndex == 1).Select(c => c.Header.ToString()).First();
-            var targetLocales = columns.Where(c => c.DisplayIndex > 1).Select(c => c.Header.ToString()).ToList();
+            var columns = dgTranslations.Columns
+                .Where(c => c.CanUserReorder)
+                .OrderBy(c => c.DisplayIndex)
+                .Select(c => c.Header.ToString());
+            if (!columns.Any())
+            {
+                return;
+            }
+            var sourceLocale = columns.First();
+            var targetLocales = columns.Skip(1).ToList();
             pbStatus.Value = 0;
             pbStatus.Visibility = Visibility.Visible;
             var statusStep = 100 / (_fileProvider.Translations.Keys.Count * targetLocales.Count);
