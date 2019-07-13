@@ -222,7 +222,9 @@ namespace LocaleManager
                         continue;
                     }
                     var translated = await _translator.Translate(sourceValue, targetLocale, sourceLocale);
-                    _fileProvider.Translations.Set(key, targetLocale, translated);
+                    if(!string.IsNullOrWhiteSpace(translated)){
+                        _fileProvider.Translations.Set(key, targetLocale, translated);
+                    }
                 }
             }
 

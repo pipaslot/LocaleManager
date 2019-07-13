@@ -18,9 +18,17 @@ namespace LocaleManager.Translations
             {
                 return null;
             }
-            var result = await _client.TranslateLiteAsync(text, fromLang, toLang);
 
-            return result.MergedTranslation;
+            try
+            {
+                var result = await _client.TranslateLiteAsync(text, fromLang, toLang);
+                return result.MergedTranslation;
+            }
+            catch (Exception e)
+            {
+                //This is not good to do
+                return null;
+            }
         }
     }
 }
