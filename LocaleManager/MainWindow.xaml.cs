@@ -54,7 +54,7 @@ namespace LocaleManager
                 MessageBox.Show("No Locale file was found");
                 return;
             }
-            
+
             dgTranslations.Columns.Clear();
             dgTranslations.Columns.Add(new DataGridTextColumn
             {
@@ -81,7 +81,7 @@ namespace LocaleManager
         private string GetDirectory()
         {
             var directory = Settings.Default.Folder;
-            return (!string.IsNullOrWhiteSpace(directory)  && Directory.Exists(directory))? directory : AppDomain.CurrentDomain.BaseDirectory;
+            return (!string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory)) ? directory : AppDomain.CurrentDomain.BaseDirectory;
         }
 
         private void SetDirectory(string directory)
@@ -95,7 +95,7 @@ namespace LocaleManager
             var invalid = _fileProvider.Translations.GetInvalidNodes();
 
             var columnsCount = _fileProvider.Locales.Count + 1;
-            foreach (var path in _fileProvider.Translations.Keys.OrderBy(k=>k))
+            foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))
             {
                 var columns = new List<string>(columnsCount) { path };
 
@@ -156,7 +156,10 @@ namespace LocaleManager
 
         private void MenuItem_SaveClick(object sender, RoutedEventArgs e)
         {
-            _fileProvider.Save();
+            if (_fileProvider.Save())
+            {
+                MessageBox.Show("Saved");
+            }
         }
 
         private void MenuItem_AddClick(object sender, RoutedEventArgs e)
@@ -205,25 +208,35 @@ namespace LocaleManager
             var targetLocales = columns.Skip(1).ToList();
             pbStatus.Value = 0;
             pbStatus.Visibility = Visibility.Visible;
-            var statusStep = 100 / (_fileProvider.Translations.Keys.Count * targetLocales.Count);
+            var statusStep = 100m / (_fileProvider.Translations.Keys.Count * targetLocales.Count);
+            var total = 0m;
             foreach (var key in _fileProvider.Translations.Keys)
             {
                 foreach (var targetLocale in targetLocales)
                 {
-                    pbStatus.Value += statusStep;
+                    total += statusStep;
+                    pbStatus.Value = (int)total;
                     var currentValue = _fileProvider.Translations.Get(key, targetLocale);
                     if (!string.IsNullOrWhiteSpace(currentValue))
                     {
-                       continue;
+                        continue;
                     }
                     var sourceValue = _fileProvider.Translations.Get(key, sourceLocale);
                     if (string.IsNullOrWhiteSpace(sourceValue))
                     {
                         continue;
                     }
-                    var translated = await _translator.Translate(sourceValue, targetLocale, sourceLocale);
-                    if(!string.IsNullOrWhiteSpace(translated)){
-                        _fileProvider.Translations.Set(key, targetLocale, translated);
+                    try
+                    {
+                        var translated = await _translator.Translate(sourceValue, targetLocale, sourceLocale);
+                        if (!string.IsNullOrWhiteSpace(translated))
+                        {
+                            _fileProvider.Translations.Set(key, targetLocale, translated);
+                        }
+                    }
+                    catch
+                    {
+                        break;
                     }
                 }
             }

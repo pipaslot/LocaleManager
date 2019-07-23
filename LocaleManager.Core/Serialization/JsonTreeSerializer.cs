@@ -1,12 +1,12 @@
-﻿using LocaleManager.Core.Extensions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LocaleManager.Core.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace LocaleManager.Core
+namespace LocaleManager.Core.Serialization
 {
-    public class JsonSerializer
+    public class JsonTreeSerializer : ISerializer
     {
         public Dictionary<string, string> Deserialize(string content)
         {

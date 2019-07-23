@@ -47,8 +47,10 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\JTokenExtensions.cs" />
     <Compile Include="FilePattern.cs" />
+    <Compile Include="Serialization\ISerializer.cs" />
+    <Compile Include="Serialization\JsonDictionarySerializer.cs" />
     <Compile Include="TranslationManager.cs" />
-    <Compile Include="JsonSerializer.cs" />
+    <Compile Include="Serialization\JsonTreeSerializer.cs" />
     <Compile Include="JsonFile.cs" />
     <Compile Include="TranslationCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,8 +58,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

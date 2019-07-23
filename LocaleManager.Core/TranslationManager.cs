@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using LocaleManager.Core.Serialization;
 
 namespace LocaleManager.Core
 {
@@ -9,8 +11,10 @@ namespace LocaleManager.Core
     {
         public TranslationCollection Translations { get; private set; } = new TranslationCollection();
         public ReadOnlyCollection<string> Locales => Translations.Locales;
-        private List<JsonFile> _files { get; } = new List<JsonFile>();
-        private JsonSerializer _serializer = new JsonSerializer();
+
+        private readonly List<JsonFile> _files = new List<JsonFile>();
+
+        private ISerializer _serializer;
 
         public void LoadFiles(string path, string pattern = "*.json")
         {
@@ -25,6 +29,12 @@ namespace LocaleManager.Core
                     _files.Add(file);
                 }
             }
+
+            _serializer = DetectSerializer(_files.FirstOrDefault());
+            if (_serializer == null)
+            {
+                return;
+            }
             var locales = _files.Select(f => f.Name).ToList();
             Translations = new TranslationCollection(locales);
             foreach (var file in _files)
@@ -34,14 +44,50 @@ namespace LocaleManager.Core
             }
         }
 
-        public void Save()
+        public bool Save()
         {
+            if (_serializer == null) return false;
             foreach (var file in _files)
             {
                 var translations = Translations.GetAllTranslations(file.Name);
                 var content = _serializer.Serialize(translations);
                 file.Save(content);
             }
+
+            return true;
+        }
+
+        private ISerializer DetectSerializer(JsonFile file)
+        {
+            if (file != null)
+            {
+                var treeSerializer = new JsonTreeSerializer();
+                var treeContent = treeSerializer.Serialize(treeSerializer.Deserialize(file.Content));
+                if (AreEqual(treeContent, file.Content))
+                {
+                    return treeSerializer;
+                }
+
+                var dicSerializer = new JsonDictionarySerializer();
+                var dicContent = dicSerializer.Serialize(dicSerializer.Deserialize(file.Content));
+                if (AreEqual(dicContent, file.Content))
+                {
+                    return dicSerializer;
+                }
+            }
+            return null;
+        }
+
+        private bool AreEqual(string first, string second)
+        {
+            var left = RemoveWhitespaces(first);
+            var right = RemoveWhitespaces(second);
+            return left.Length == right.Length;
+        }
+
+        private string RemoveWhitespaces(string value)
+        {
+            return Regex.Replace(value, @"\s+", "");
         }
     }
 }

@@ -20,7 +20,7 @@ namespace LocaleManager.Core.Extensions
             {
                 if (!data.ContainsKey(token.Path))
                 {
-                    data.Add(token.Path, value.Value.ToString());
+                    data.Add(token.Path, value.Value?.ToString());
                 }
             }
             else

@@ -12,23 +12,15 @@ namespace LocaleManager.Translations
         private readonly GoogleTranslator _client = new GoogleTranslator();
         public async Task<string> Translate(string text, string to, string from = "en")
         {
-            var fromLang = GoogleTranslator.GetLanguageByISO(from) ?? Language.Auto;;
+            var fromLang = GoogleTranslator.GetLanguageByISO(from) ?? Language.Auto; ;
             var toLang = GoogleTranslator.GetLanguageByISO(to);
             if (fromLang == null || toLang == null)
             {
                 return null;
             }
 
-            try
-            {
-                var result = await _client.TranslateLiteAsync(text, fromLang, toLang);
-                return result.MergedTranslation;
-            }
-            catch (Exception e)
-            {
-                //This is not good to do
-                return null;
-            }
+            var result = await _client.TranslateLiteAsync(text, fromLang, toLang);
+            return result.MergedTranslation;
         }
     }
 }
