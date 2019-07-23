@@ -93,7 +93,7 @@ namespace LocaleManager
         private void RefreshGridData()
         {
             _rows.Clear();
-            var invalid = _fileProvider.Translations.GetInvalidNodes();
+            var invalid = _fileProvider.Translations.GetPartialNodes();
             var locales = _fileProvider.Translations.GetLocalesByCountOfValues();
             var columnsCount = _fileProvider.Locales.Count + 1;
             foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))

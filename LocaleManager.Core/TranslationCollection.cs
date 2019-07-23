@@ -7,16 +7,18 @@ namespace LocaleManager.Core
 {
     public class TranslationCollection
     {
+        private readonly bool _filterPartialKeys;
         private readonly Dictionary<string, Dictionary<string, string>> _collection = new Dictionary<string, Dictionary<string, string>>();
 
         public ReadOnlyCollection<string> Locales { get; }
         public ReadOnlyCollection<string> Keys => new ReadOnlyCollection<string>(_collection.Select(c => c.Key).ToList());
-        public TranslationCollection() : this(new List<string>())
+        public TranslationCollection(bool filterPartialKeys) : this(new List<string>(), filterPartialKeys)
         {
         }
 
-        public TranslationCollection(List<string> locales)
+        public TranslationCollection(List<string> locales, bool filterPartialKeys)
         {
+            _filterPartialKeys = filterPartialKeys;
             Locales = new ReadOnlyCollection<string>(locales.Distinct().ToList());
         }
         
@@ -59,7 +61,7 @@ namespace LocaleManager.Core
         public Dictionary<string, string> GetAllTranslations(string locale)
         {
             var result = new Dictionary<string, string>();
-            var ignored = GetInvalidNodes();
+            var ignored = GetPartialNodes();
             foreach (var translations in _collection)
             {
                 if (!ignored.Contains(translations.Key))
@@ -94,12 +96,20 @@ namespace LocaleManager.Core
                 .ToList();
         }
 
-        public List<string> GetInvalidNodes()
+        /// <summary>
+        /// Returns nodes which are partially already in dictionary
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetPartialNodes()
         {
             var result = new List<string>();
+            if (!_filterPartialKeys)
+            {
+                return result;
+            }
             foreach (var prop in _collection)
             {
-                if (!IsValid(prop.Key))
+                if (!IsPartial(prop.Key))
                 {
                     result.Add(prop.Key);
                 }
@@ -108,7 +118,7 @@ namespace LocaleManager.Core
             return result;
         }
 
-        private bool IsValid(string key)
+        private bool IsPartial(string key)
         {
             var path = key.ToLower() + ".";
             return !_collection.Any(t => t.Key.ToLower().StartsWith(path));

@@ -29,5 +29,7 @@ namespace LocaleManager.Core.Serialization
             }
             return JsonConvert.SerializeObject(token, Formatting.Indented);
         }
+        
+        public bool IsPartialKeySupported => false;
     }
 }

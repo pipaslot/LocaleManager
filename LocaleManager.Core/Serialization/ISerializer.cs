@@ -6,5 +6,6 @@ namespace LocaleManager.Core.Serialization
     {
         Dictionary<string, string> Deserialize(string content);
         string Serialize(Dictionary<string, string> content);
+        bool IsPartialKeySupported { get; }
     }
 }

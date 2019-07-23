@@ -9,7 +9,7 @@ namespace LocaleManager.Core
 {
     public class TranslationManager
     {
-        public TranslationCollection Translations { get; private set; } = new TranslationCollection();
+        public TranslationCollection Translations { get; private set; } = new TranslationCollection(false);
         public ReadOnlyCollection<string> Locales => Translations.Locales;
 
         private readonly List<JsonFile> _files = new List<JsonFile>();
@@ -36,7 +36,7 @@ namespace LocaleManager.Core
                 return;
             }
             var locales = _files.Select(f => f.Name).ToList();
-            Translations = new TranslationCollection(locales);
+            Translations = new TranslationCollection(locales, !_serializer.IsPartialKeySupported);
             foreach (var file in _files)
             {
                 var translations = _serializer.Deserialize(file.Content);

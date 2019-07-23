@@ -30,6 +30,8 @@ namespace LocaleManager.Core.Serialization
 
             return $@"{{{Environment.NewLine}{serialized}{Environment.NewLine}}}";
         }
+        
+        public bool IsPartialKeySupported => true;
 
         private List<(string Key, string Value)> ToList(Dictionary<string, string> content)
         {
