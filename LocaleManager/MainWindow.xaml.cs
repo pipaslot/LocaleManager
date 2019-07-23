@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LocaleManager.Extensions;
 using LocaleManager.Properties;
 using LocaleManager.Translations;
 using WinForm = System.Windows.Forms;
@@ -94,13 +95,12 @@ namespace LocaleManager
         {
             _rows.Clear();
             var invalid = _fileProvider.Translations.GetPartialNodes();
-            var locales = _fileProvider.Translations.GetLocalesByCountOfValues();
             var columnsCount = _fileProvider.Locales.Count + 1;
             foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))
             {
                 var columns = new List<string>(columnsCount) { path };
 
-                foreach (var locale in locales)
+                foreach (var locale in dgTranslations.Columns.GetLocales())
                 {
                     var text = _fileProvider.Translations.Get(path, locale);
                     columns.Add(text);
