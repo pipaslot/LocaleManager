@@ -41,6 +41,7 @@ namespace LocaleManager
             dgTranslations.AutoGenerateColumns = false;
             dgTranslations.CanUserAddRows = false;
             dgTranslations.CanUserDeleteRows = false;
+            dgTranslations.CanUserSortColumns = false;
             var directory = GetDirectory();
             Init(directory);
         }
@@ -93,13 +94,13 @@ namespace LocaleManager
         {
             _rows.Clear();
             var invalid = _fileProvider.Translations.GetInvalidNodes();
-
+            var locales = _fileProvider.Translations.GetLocalesByCountOfValues();
             var columnsCount = _fileProvider.Locales.Count + 1;
             foreach (var path in _fileProvider.Translations.Keys.OrderBy(k => k))
             {
                 var columns = new List<string>(columnsCount) { path };
 
-                foreach (var locale in _fileProvider.Locales)
+                foreach (var locale in locales)
                 {
                     var text = _fileProvider.Translations.Get(path, locale);
                     columns.Add(text);
