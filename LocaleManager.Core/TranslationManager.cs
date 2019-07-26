@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -63,26 +64,24 @@ namespace LocaleManager.Core
             {
                 var treeSerializer = new JsonTreeSerializer();
                 var treeContent = treeSerializer.Serialize(treeSerializer.Deserialize(file.Content));
-                if (AreEqual(treeContent, file.Content))
-                {
-                    return treeSerializer;
-                }
+                var treeDiff = GetDiff(treeContent, file.Content);
+               
 
                 var dicSerializer = new JsonDictionarySerializer();
                 var dicContent = dicSerializer.Serialize(dicSerializer.Deserialize(file.Content));
-                if (AreEqual(dicContent, file.Content))
-                {
-                    return dicSerializer;
-                }
+                var dicDiff = GetDiff(dicContent, file.Content);
+                return treeDiff < dicDiff
+                    ? (ISerializer) treeSerializer
+                    : dicSerializer;
             }
             return null;
         }
 
-        private bool AreEqual(string first, string second)
+        private int GetDiff(string first, string second)
         {
             var left = RemoveWhitespaces(first);
             var right = RemoveWhitespaces(second);
-            return left.Length == right.Length;
+            return Math.Abs(left.Length - right.Length);
         }
 
         private string RemoveWhitespaces(string value)
