@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -227,21 +228,19 @@ namespace LocaleManager
                     {
                         continue;
                     }
-                    try
+                    var translateResponse = await _translator.Translate(sourceValue, targetLocale, sourceLocale);
+                    if (translateResponse.Success && !string.IsNullOrWhiteSpace(translateResponse.Translation))
                     {
-                        var translated = await _translator.Translate(sourceValue, targetLocale, sourceLocale);
-                        if (!string.IsNullOrWhiteSpace(translated))
-                        {
-                            _fileProvider.Translations.Set(key, targetLocale, translated);
-                        }
+                        _fileProvider.Translations.Set(key, targetLocale, translateResponse.Translation);
                     }
-                    catch
+                    else if(translateResponse.ErrorCode == ErrorCode.TooManyRequests)
                     {
-                        break;
+                        MessageBox.Show("Free api limit exceeded");
+                        goto End;
                     }
                 }
             }
-
+            End:
             pbStatus.Visibility = Visibility.Hidden;
             RefreshGridData();
         }
