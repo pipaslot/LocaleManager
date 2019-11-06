@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.RegularExpressions;
 
 namespace LocaleManager.Core
 {
@@ -7,6 +8,12 @@ namespace LocaleManager.Core
         public string Path { get; }
         public string Name { get; }
         public string Content { get; private set; }
+
+        public bool IsEmpty()
+        {
+            var trimmed = Regex.Replace(Content??"", @"\s+", "");
+            return trimmed.Length <= 2;//There are only two brackets
+        }
 
         internal JsonFile(string path, string name = null)
         {

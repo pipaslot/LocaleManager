@@ -31,7 +31,7 @@ namespace LocaleManager.Core
                 }
             }
 
-            _serializer = DetectSerializer(_files.FirstOrDefault());
+            _serializer = DetectSerializer(_files);
             if (_serializer == null)
             {
                 return;
@@ -58,21 +58,25 @@ namespace LocaleManager.Core
             return true;
         }
 
-        private ISerializer DetectSerializer(JsonFile file)
+        private ISerializer DetectSerializer(ICollection<JsonFile> files)
         {
-            if (file != null)
+            foreach (var file in files)
             {
+                if (file == null) continue;
+                if (file.IsEmpty()) continue;
+
                 var treeSerializer = new JsonTreeSerializer();
                 var treeContent = treeSerializer.Serialize(treeSerializer.Deserialize(file.Content));
                 var treeDiff = GetDiff(treeContent, file.Content);
-               
+
 
                 var dicSerializer = new JsonDictionarySerializer();
                 var dicContent = dicSerializer.Serialize(dicSerializer.Deserialize(file.Content));
                 var dicDiff = GetDiff(dicContent, file.Content);
                 return treeDiff < dicDiff
-                    ? (ISerializer) treeSerializer
+                    ? (ISerializer)treeSerializer
                     : dicSerializer;
+
             }
             return null;
         }
